@@ -204,15 +204,411 @@ sd(tab2_1$n_filhos, na.rm=TRUE)
 
 ## Testes para a média populacional e para a comparação de duas médias
 
+**t.test()**
+
+Realiza o teste t-Student para uma ou duas amostras.
+
+**sintaxe:**
+
+t.test(*amostra1, amostra2, opções*)
+
+**parâmetros**
+
+amostra1: Vetor contendo a amostra da qual se quer testar a média populacional, ou comparar a média populacional com a média populacional da amostra 2.
+
+amostra2: Vetor contendo a amostra 2 para comparação da média populacional com a média populacional da amostra 1.
+
+**opções**
+
+alternative: string indicando a hipótese alternativa desejada. Valores possíveis: "two-sided", "less" ou "greater".
+
+mu: valor indicando o verdadeiro valor da média populacional para o caso de uma amostra, ou a diferença entre as médias para o caso de duas amostras.
+
+paired: TRUE -- realiza o teste t pareado.
+
+FALSE -- realiza o teste t não pareado.
+
+var.equal:TRUE -- indica que a variância populacional é a igual nas duas amostras.
+
+FALSE -- indica que a variância populacional de cada amostra é diferente.
+
+conf.level: coeficiente de confiança do intervalo.
+
+**Exemplo:**
+
+### Teste t para média populacional
+
+```{r ttest}
+amostra1 = c(14.9,13.4,14.5,13.5,15.0,13.9,14.9,16.4,14.6,15.4)
+t.test(amostra1,mu=15)
+```
+
+### Teste t para comparação de duas médias com variâncias iguais
+
+```{r ttestequalvar}
+amostra1 = c(16.6,13.4,14.6,15.1,12.9,15.2,14.0,16.6,15.4,13.0)
+amostra2 = c(15.8,17.9,18.2,20.2,18.1,17.8,18.3,18.6,17.0,18.4)
+t.test(amostra1, amostra2, var.equal = TRUE)
+```
+
+### Teste t pareado
+
+```{r ttestpair}
+antes = c(16.6,13.4,14.6,15.1,12.9,15.2,14.0,16.6,15.4,13.0)
+depois = c(15.8,17.9,18.2,20.2,18.1,17.8,18.3,18.6,17.0,18.4)
+t.test(antes,depois,paired=TRUE)
+```
+
 ## Testes para uma proporção populacional e para comparação de duas proporções
+
+**prop.test()**
+
+Realiza o teste de proporções para uma ou duas amostras.
+
+**sintaxe:**
+
+**prop.test**(*x, n, p, opções*)
+
+**Parâmetros**
+
+x: Vetor contendo o número de sucessos em cada amostra.
+
+n: Vetor contendo o número de realizações de cada amostra.
+
+p: Vetor contendo as probabilidades de sucesso de cada amostra.
+
+Exemplo:
+
+### Teste para uma proporção populacional
+
+```{r proptest}
+prop.test(104,200,0.6,correct=F)
+
+```
+
+### Teste para comparação de duas proporções
+
+```{r proptest2}
+prop.test(c(104,50),c(200,95),correct=F)
+```
+
+Teste
+
+Realiza o teste exato de independência de linhas e colunas em uma tabela de contingência com as marginais fixas.
+
+**Sintaxe:**
+
+**fisher.test**(*x, opções*)
+
+**Parâmetros**
+
+x: Matriz (tabela) contendo a frequência de observações em cada casela.
+
+**Opções**
+
+alternative: string indicando a hipótese alternativa desejada.
+
+Valores possíveis: "two-sided", "less" ou "greater".
+
+conf.int: TRUE: calcula o intervalo de confiança para a razão de chances em tabelas de dimensão 2x2.
+
+conf.level: coeficiente de confiança do intervalo.
+
+Exemplo:
+
+![Teste de independência do exemplo: Satisfação no trabalho, Agresti(2002, p.57)](fisher.jpg){#fig-1}
+
+```{r fisher}
+Trabalho = matrix(c(1,2,1,0, 3,3,6,1, 10,10,14,9, 6,7,12,11), 4, 4,
+dimnames = list(Receita=c("< 15mil", "15-25mil", "25-40mil", "> 40mil"),
+Satisfação=c("M.Insatisfeito", "P.Insatisfeito", "Mod.Satisfeito", "M.Satisfeito")))
+fisher.test(Trabalho)
+```
 
 ## Testes para Normalidade
 
-## Testes para comparação de variâncias
+Estes pacotes contém diversos testes que verificam se os dados amostrais contém evidências de serem oriundos de uma população com distribuição Normal.
+
+**Pacote: base** (Este pacote já está instalado)
+
+### shapiro.test()
+
+Realiza o teste de Shapiro-Wilk para normalidade.
+
+**sintaxe:**
+
+**shapiro.test**(*amostra*)
+
+**Parâmetros**
+
+amostra: Vetor contendo a amostra da qual se quer testar normalidade. Deve conter uma amostra de tamanho entre 3 e 5000.
+
+São permitidos missing values.
+
+Exemplo:
+
+```{r normality}
+shapiro.test(rnorm(10, mean=10, sd=4))
+```
+
+**Pacote opcional: nortest**
+
+Este pacote precisa ser instalado.
+
+```{r loadlibraries}
+#| echo: false
+#| message: false
+#### ├ Instalando e carregando bibliotecas externas no R ####
+if (!require(nortest))
+  install.packages('nortest', repos = "http://cran.us.r-project.org")
+
+if (!require(car))
+  install.packages('car', repos = "http://cran.us.r-project.org")
+
+
+```
+
+### ad.test()
+
+Realiza o teste de Anderson-Darling para normalidade.
+
+sintaxe:
+
+**ad.test**(*amostra*)
+
+**Parâmetros**
+
+amostra: Vetor contendo a amostra da qual se quer testar normalidade. Deve conter uma amostra
+
+de tamanho maior ou igual a 7.
+
+São permitidos missing values.
+
+**Exemplo:**
+
+```{r}
+ad.test(rnorm(10, mean=10, sd=4))
+```
+
+### cvm.test()
+
+Realiza o teste de Cramer-von Mises para normalidade.
+
+**sintaxe:**
+
+**cvm.test**(*amostra*)
+
+**Parâmetros**
+
+amostra: Vetor contendo a amostra da qual se quer testar normalidade. Deve conter uma
+
+amostra de tamanho maior ou igual a 7.
+
+São permitidos missing values.
+
+**Exemplo:**
+
+```{r Cramer}
+cvm.test(rnorm(10, mean=10, sd=4))
+```
+
+### lillie.test()
+
+Realiza o teste de Lilliefors (*Kolmogorov-Smirnov*) para normalidade.
+
+**sintaxe:**
+
+**lillie.test**(*amostra*)
+
+**Parâmetros**
+
+amostra: Vetor contendo a amostra da qual se quer testar normalidade. Deve conter uma amostra de tamanho maior ou igual a 4.
+
+São permitidos missing values.
+
+**Exemplo:**
+
+```{r lillie}
+lillie.test(rnorm(10, mean=10, sd=4))
+```
+
+### pearson.test()
+
+Realiza o teste Qui-quadrado de Pearson para normalidade.
+
+**sintaxe:**
+
+**pearson.test**(*amostra*)
+
+**Parâmetros**
+
+amostra: Vetor contendo a amostra da qual se quer testar normalidade.
+
+São permitidos missing values.
+
+**Opções**
+
+n.classes: Número de classes. São permitidos missing values.
+
+adjust: TRUE: o valor p é calculado de uma distribuição Qui-quadrado com o número de graus de
+
+liberdade igual ao número de classes -- 3.
+
+FALSE: o valor p é calculado de uma distribuição Qui-quadrado com o número de graus de
+
+liberdade igual ao número de classes -- 1.
+
+**Exemplo:**
+
+```{r pearson}
+pearson.test(rnorm(10, mean=10, sd=4))
+```
+
+### sf.test()
+
+Realiza o teste de Shapiro-Francia para normalidade.
+
+**sintaxe:**
+
+sf.test(amostra)
+
+**Parâmetros**
+
+amostra: Vetor contendo a amostra da qual se quer testar normalidade.
+
+Deve conter uma amostra de tamanho entre 5 e 5000. São permitidos missing values.
+
+**Exemplo:**
+
+```{r sfrancia}
+sf.test(rnorm(10, mean=10, sd=4))
+```
+
+# Testes para comparação de variâncias
+
+## Pacote: stats
+
+### bartlett.test()
+
+Realiza o teste de Bartlett com a hipótese nula de que as variâncias dos grupos são iguais [@rcoreteam2023].
+
+**sintaxe:**
+
+bartlett.test(formula, dados)
+
+**Parâmetros**
+
+formula: Relação entre a variável dependente e o fator. Ex: "Vendas \~ Mês".
+
+dados: Conjunto de dados onde será aplicada a formula.
+
+**Exemplo:** Queremos comparar a variabilidade das vendas entre os meses
+
+![Vendas mensais de três lojas](bartlett.jpg){#fig-2}
+
+```{r bartlett}
+Vendas = c(10,12,15,14,13,17,16,13,12,19,14,16,12,
+13,10,15,11,16,11,16,12,10,9,12,12,
+11,8,13,11,14,18,16,21,23,25,24)
+Mes = c("Jan","Jan","Jan","Fev","Fev","Fev","Mar","Mar","Mar","Abr","Abr","Abr",
+"Mai","Mai","Mai","Jun","Jun","Jun","Jul","Jul","Jul","Ago","Ago","Ago",
+"Set","Set","Set","Out","Out","Out","Nov","Nov","Nov","Dez","Dez","Dez")
+dados = data.frame(Vendas=Vendas, Mes=Mes)
+bartlett.test(Vendas ~ Mes, data=dados)
+```
+
+::: callout-note
+Também é possível especificar os grupos da seguinte forma: bartlett.test(list(GRUPO1, GRUPO2)), onde GRUPO1 e GRUPO2 são vetores contendo os valores das observações de cada amostra.
+:::
+
+**Exemplo:**
+
+![Disputa de jogos entre dois times](bartlett2.jpg){#fig-3}
+
+```{r bartlett2}
+TimeA = c(30,25,32,22,19,26)
+TimeB = c(18,24,31,28,29,30)
+bartlett.test(list(TimeA, TimeB))
+
+```
+
+## Pacote: car
+
+Este pacote precisa ser instalado [@fox2023].
+
+### levene.test()
+
+Realiza o teste de Bartlett com a hipótese nula de que as variâncias dos grupos são iguais.
+
+**sintaxe:**
+
+leveneTest(formula, dados)
+
+**Parâmetros**
+
+formula: Relação entre a variável dependente e o fator. Ex: "Vendas \~ Mês".
+
+dados: Conjunto de dados onde será aplicada a formula.
+
+**Exemplo:** Utilizando o mesmo exemplo visto no teste de Bartlett:
+
+![Vendas mensais de três lojas](bartlett.jpg){alt="Vendas mensais de três lojas"}
+
+```{r Levene}
+
+leveneTest(dados$Vendas, dados$Mes)
+
+```
 
 # Funções Matemáticas
 
+## Combinatória
+
+Calcula o número de combinações de n elementos em grupos de tamanho k.
+
+**sintaxe:**
+
+**choose**(n,k)
+
+**exemplo:**
+
+```{r combination}
+choose(8,5)
+```
+
+## Fatorial
+
+Calcula o fatorial de x.
+
+**sintaxe:**
+
+**factorial**(x)
+
+**exemplo:**
+
+```{r fatorial}
+factorial(5)
+```
+
+## Raiz Quadrada
+
+Calcula a raiz quadrada de x.
+
+**sintaxe:**
+
+**sqrt**(x)
+
+**exemplo:**
+
+```{r Root}
+sqrt(81)
+```
+
 # Gráficos
+
+Os gráficos nos permitem analisar uma grande quantidade de informações de forma rápida, sem que seja necessário olhar tabelas e medidas de resumo. O R possui uma enorme capacidade para gerar diversos tipos de gráficos de alta qualidade totalmente configuráveis, desde cores e tipos de linhas, até legendas e textos adicionais.
+
+A grande maioria das funções gráficas faz uso de opções comuns, ou seja, é extremamente fácil personalizar qualquer tipo de gráfico pois muitas das opções são iguais. As opções comuns a todos os gráficos serão abordadas aqui, e em cada seção seguinte as opções específicas àquele determinado tipo de gráfico serão apresentadas.
 
 # Probabilidade
 
