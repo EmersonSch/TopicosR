@@ -1,0 +1,120 @@
+---
+title: "Tópicos de estatística aplicada utilizando R"
+subtitle: "Uma abordagem gerando relatórios reprodutíveis usando RStudio, $LaTeX$, RMarkdown e Quarto"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "Emerson Scheidegger"
+author-meta: "Emerson Scheidegger"
+keywords: "R; RStudio; LaTeX; Quarto; Markdown"
+title-meta: "Tópicos de Estatística com R"
+date-meta: "`r format(Sys.time(), '%d %B, %Y')`"
+subject: "Tópicos de estatística aplicada utilizando R"
+lang: pt
+latex-tinytex: false
+latex-auto-install: true
+latex-tlmgr-opts: 
+  - update --self
+abstract: "Neste documento tento abordar de forma simples como trabalhar com a Regressão Linear Simples utilizando a linguagem R e a suíte do RStudio. Para gerar este documento utilizei o Rstudio + RMarkdown + LaTex + Quarto."
+thanks: "Agradeço ao @rcoreteam2023 e a todos que dedicaram seu tempo no desenvolvimento de funções e pacotes para o ambiente RStudio principalmente a Yihui Xie <https://yihui.org> pela milhares de horas dedicadas a melhorar nossas vidas." 
+format: 
+  pdf:
+    toc: true
+    toc-title: Sumário
+    lof: true
+    number-sections: true
+    colorlinks: true
+    papersize: a4
+    geometry:
+      - top=30mm
+      - left=20mm
+      - right=20mm
+      - heightrounded
+editor: visual
+bibliography: Minha biblioteca.bib
+csl: associacao-brasileira-de-normas-tecnicas.csl
+---
+
+\newpage
+
+# Características do R
+
+-   Não foi feito para manipulação de dados em larga escala.
+
+-   Forma mais fácil e direta de acessar os dados é convertê-los para texto e importar.
+
+-   Salva a sessão em um arquivo .RDATA, que armazena todos os objetos R, possibilitando que um projeto seja retomado posteriormente ou intercambiado com colaboradores.
+
+-   Acessa bancos de dados e planilhas Microsoft Excel via ODBC e outros bancos de dados por servidor SQL, ampliando a capacidade de trabalhar com dados em larga escala.
+
+-   A partir da versão 2.1.1 possui um editor de script, que facilita a execução de comandos diretamente de dentro do R.
+
+-   Possui pacotes com funções específicas que podem ser instalados pela Internet, através do próprio programa.
+
+-   Conta com inúmeros colaboradores no mundo inteiro que criam, testam e corrigem as funções que podem ser usadas por qualquer pessoa.
+
+-   Gera gráficos em diferentes formatos para as mais diversas utilizações.
+
+-   O Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>. \newpage
+
+# Importação de dados
+
+```{r}
+download.file("https://www.ime.usp.br/~pam/dados.RData", "dados.RData") 
+load("dados.RData")
+
+names(tab2_1)
+summary(tab2_1$salario)
+
+ni<-table(tab2_1$grau_instrucao) # Calcula a tabela de frequências absolutas e armazena o resultado em 'mytab'
+fi<-prop.table(ni) # Tabela de frequências relativas (f_i)
+p_fi<-100*prop.table(ni) # Porcentagem (100 f_i)
+
+# Adiciona linhas de total
+ni<-c(ni,sum(ni)) 
+fi<-c(fi,sum(fi))
+p_fi<-c(p_fi,sum(p_fi))
+names(ni)[4]<-"Total"
+tab2_2<-cbind(ni,fi=round(fi,digits=2),p_fi=round(p_fi,digits=2))
+tab2_2
+```
+
+## Importando arquivos .csv
+
+## Importanto arquivos .xls ou .xlxs
+
+# Funções estatísticas
+
+## Tabelas
+
+## Tabelas de proporções
+
+## Medidas de resumo
+
+## Summary
+
+### Média
+
+### Mediana
+
+### Variância
+
+### Desvio-padrão
+
+# Testes de Hipótese
+
+## Testes para a média populacional e para a comparação de duas médias
+
+## Testes para uma proporção populacional e para comparação de duas proporções
+
+## Testes para Normalidade
+
+## Testes para comparação de variâncias
+
+# Funções Matemáticas
+
+# Gráficos
+
+# Probabilidade
+
+# Exemplos
+
+# Referências
