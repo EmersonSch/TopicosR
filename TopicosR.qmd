@@ -611,6 +611,25 @@ Os gráficos nos permitem analisar uma grande quantidade de informações de for
 
 A grande maioria das funções gráficas faz uso de opções comuns, ou seja, é extremamente fácil personalizar qualquer tipo de gráfico pois muitas das opções são iguais. As opções comuns a todos os gráficos serão abordadas aqui, e em cada seção seguinte as opções específicas àquele determinado tipo de gráfico serão apresentadas.
 
+## Gráfico de barras
+
+```{r bargraph}
+barplot(table(tab2_1$estado_civil), col=c("blue","red"),
+ylim=c(0,25),
+space=.8, width=c(.2,.2),
+main="Número de filhos por estado civil",
+xlab="Estado Civil", ylab="Número de Filhos")
+
+```
+
+## Histograma
+
+## Boxplot
+
+## Gráfico de Pizza
+
+## Gráfico de Dispersão
+
 # Probabilidade
 
 # Exemplos
