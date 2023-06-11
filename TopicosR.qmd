@@ -33,6 +33,14 @@ bibliography: Minha biblioteca.bib
 csl: associacao-brasileira-de-normas-tecnicas.csl
 ---
 
+```{r, setup, include=FALSE}
+rmarkdown::find_pandoc(version = '2.17.1.1')
+```
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(fig.path="Figs/", message = FALSE, warning = FALSE, fig.width = 5, fig.height = 5)
+```
+
 \newpage
 
 # Características do R
@@ -59,7 +67,7 @@ csl: associacao-brasileira-de-normas-tecnicas.csl
 
 ## Importando arquivos .csv
 
-```{r}
+```{r loaddata}
 #download.file("https://www.ime.usp.br/~pam/dados.RData", "dados.RData") 
 #load("dados.RData")
 
@@ -75,7 +83,7 @@ summary(tab2_1$salario)
 
 ## **Distribuições de Frequência**
 
-```{r}
+```{r freqtable}
 
 # Calcula a tabela de frequências absolutas e armazena o resultado em 'ni'
 ni<-table(tab2_1$grau_instrucao)
@@ -125,7 +133,6 @@ Medidas de resumo dos salários:
 
 ```{r resume1}
 summary(tab2_1$salario)
-
 
 ```
 
@@ -177,7 +184,7 @@ cat('A variância de salário é:', var(tab2_1$salario),'\n')
 
 **opções:**
 
-na.rm: TRUE, calcula o desvio padrão considerando apenas os dados existentes, ignora os dados faltantes.
+[na.rm]{style="color:red;"}: TRUE, calcula o desvio padrão considerando apenas os dados existentes, ignora os dados faltantes.
 
 FALSE, calcula o desvio padrão apenas se todos os valores estiverem preenchidos, caso contrário retorna NA.
 
@@ -199,6 +206,8 @@ Tratando as observações faltantes
 ```{r narm}
 sd(tab2_1$n_filhos, na.rm=TRUE)
 ```
+
+\newpage
 
 # Testes de Hipótese
 
@@ -484,6 +493,8 @@ Deve conter uma amostra de tamanho entre 5 e 5000. São permitidos missing value
 sf.test(rnorm(10, mean=10, sd=4))
 ```
 
+\newpage
+
 # Testes para comparação de variâncias
 
 ## Pacote: stats
@@ -560,6 +571,8 @@ leveneTest(dados$Vendas, dados$Mes)
 
 ```
 
+\newpage
+
 # Funções Matemáticas
 
 ## Combinatória
@@ -614,6 +627,9 @@ A grande maioria das funções gráficas faz uso de opções comuns, ou seja, é
 ## Gráfico de barras
 
 ```{r bargraph}
+#| label: fig-barras
+#| fig-cap: "Gráfico de barras."
+#| warning: false
 barplot(table(tab2_1$estado_civil), col=c("blue","red"),
 ylim=c(0,25),
 space=.8, width=c(.2,.2),
@@ -624,6 +640,7 @@ xlab="Estado Civil", ylab="Número de Filhos")
 
 ## Histograma
 
+
 ## Boxplot
 
 ## Gráfico de Pizza
@@ -633,5 +650,106 @@ xlab="Estado Civil", ylab="Número de Filhos")
 # Probabilidade
 
 # Exemplos
+
+**Dividindo as observações em intervalos**
+
+```{r exemplo1}
+salario <- c(12, .4, 5, 2, 50, 8, 3, 1, 4, .25)
+intervalo <- cut(salario,breaks=c(0,1,5,max(salario)))
+intervalo
+```
+
+**Freqüência de observações em cada intervalo**
+
+```{r exemplo2}
+table(intervalo)
+intervalo
+
+```
+
+**Rotulando os intervalos**
+
+```{r exemplo3}
+levels(intervalo) <-c("pobre","rico"," rolando na grana")
+table(intervalo)
+```
+
+**Criando variáveis e exibindo-as em tabelas**
+
+```{r exemplo4}
+Peso <- c(60, 75, 55, 68)
+Altura <- c(65, 61, 70, 65)
+Genero <- c("Fe","Fe","M","Fe")
+estudo <- data.frame(Peso,Altura,Genero)
+estudo
+
+```
+
+**Alterando os rótulos das variáveis**
+
+```{r exemplo5}
+estudo = data.frame(P=Peso,H=Altura,G=Genero)
+row.names(estudo)<-c("Maria","Alice","André","Julia")
+estudo
+```
+
+**Histogramas com curvas teóricas**
+
+-   **Uniforme**
+
+```{r exemplo6}
+#| label: fig-uniforme
+#| fig-cap: "Gráfico de distribuição uniforme."
+#| warning: false
+x=runif(100)
+hist(x,probability=TRUE,main="Uniforme[0,1]",
+ylab="Densidade",col="yellow")
+curve(dunif(x,0,1),add=T)
+```
+
+-   **Binomial**
+
+```{r exemplo7}
+#| label: fig-binomial
+#| fig-cap: "Gráfico de distribuição binomial."
+#| warning: false
+n=10;p=0.25
+x=rbinom(100,n,p)
+hist(x,probability=TRUE,ylab="Densidade",
+col="pink", main="Binomial",ylim=c(0,0.30))
+xvalores=0:n
+points(xvalores,dbinom(xvalores,n,p),type="h",
+lwd=3)
+points(xvalores,dbinom(xvalores,n,p),type="p",
+lwd=3)
+```
+
+-   **Normal**
+
+```{r exemplo8}
+#| label: fig-normal
+#| fig-cap: "Gráfico de distribuição Normal."
+#| warning: false
+x=rnorm(100)
+hist(x,probability=TRUE,col="lightblue",
+main="Normal(0,1)",ylab="Densidade",
+ylim=c(0,0.5),xlim=c(-3,3))
+curve(dnorm(x),add=T)
+
+```
+
+-   **Exponencial**
+
+```{r exemplo9}
+#| label: fig-exponencial
+#| fig-cap: "Gráfico de distribuição exponencial."
+#| warning: false
+x=rexp(100,1/2500)
+hist(x,probability=TRUE,
+col="lightgreen",main="Exponencial com média=2500",ylab="Densidade")
+curve(dexp(x,1/2500),add=T)
+```
+
+\newpage
 
 # Referências
